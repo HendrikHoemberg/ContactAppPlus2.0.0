@@ -42,7 +42,7 @@ public class ContactController {
 
     @PostMapping
     public Contact createContact(@RequestBody Contact contact) {
-        return contactService.updateContact(contact);
+        return contactService.addContact(contact);
     }
 
     @PutMapping("/{id}")

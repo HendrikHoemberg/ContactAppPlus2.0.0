@@ -35,4 +35,8 @@ public class ContactService {
     public void deleteContact(Long id) {
         contactRepository.deleteContact(id);
     }
+    
+    public Contact addContact(Contact contact) {
+    	return contactRepository.addContact(contact);
+    }
 }
