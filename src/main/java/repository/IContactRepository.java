@@ -11,5 +11,4 @@ public interface IContactRepository {
     Optional<Contact> getContactById(Long id);
     void updateContact(Contact contact);
     void deleteContact(Long id);
-    Contact save(Contact contact);
 }
