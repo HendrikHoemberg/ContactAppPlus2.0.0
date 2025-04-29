@@ -71,20 +71,16 @@ public class JdbcContactRepository implements IContactRepository {
     }
  
     @Override
-    public void addContact(Contact contact) {
+    public Contact addContact(Contact contact) {
         String sql = "";
+        // TO-DO
         throw new UnsupportedOperationException("Unimplemented method 'addContact'");
     }
 
     @Override
-    public void updateContact(Contact contact) {
+    public Contact updateContact(Contact contact) {
         String sql = "";
+        // TO-DO
         throw new UnsupportedOperationException("Unimplemented method 'updateContact'");
     }
-    
-    @Override
-    public Contact save(Contact contact) {
-    	return null;
-    }
-    
 }

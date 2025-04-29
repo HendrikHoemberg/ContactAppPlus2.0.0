@@ -28,8 +28,8 @@ public class ContactService {
         return contactRepository.getContactById(id);
     }
 
-    public Contact saveContact(Contact contact) {
-        return contactRepository.save(contact);
+    public Contact updateContact(Contact contact) {
+		return contactRepository.updateContact(contact);
     }
 
     public void deleteContact(Long id) {

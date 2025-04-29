@@ -6,9 +6,9 @@ import java.util.Optional;
 import contactApp.Contact;
 
 public interface IContactRepository {
-    void addContact(Contact contact);
+    Contact addContact(Contact contact);
     List<Contact> getAllContacts();
     Optional<Contact> getContactById(Long id);
-    void updateContact(Contact contact);
+    Contact updateContact(Contact contact);
     void deleteContact(Long id);
 }

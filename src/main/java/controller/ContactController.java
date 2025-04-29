@@ -42,7 +42,7 @@ public class ContactController {
 
     @PostMapping
     public Contact createContact(@RequestBody Contact contact) {
-        return contactService.saveContact(contact);
+        return contactService.updateContact(contact);
     }
 
     @PutMapping("/{id}")
@@ -58,7 +58,7 @@ public class ContactController {
             contact.setEmail(contactDetails.getEmail());
             contact.setPhoneNumber(contactDetails.getPhoneNumber());
             
-            return ResponseEntity.ok(contactService.saveContact(contact));
+            return ResponseEntity.ok(contactService.updateContact(contact));
         } else {
             return ResponseEntity.notFound().build();
         }
