@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import contactApp.Contact;
 
-@Repository("jdbcContactRepository")
+@Repository("ContactRepository")
 public class ContactRepository implements IContactRepository {
     private static final String CONNECTION_STRING = "jdbc:sqlite:contactsdb.sqlite";
 
