@@ -16,7 +16,7 @@ public class ContactService {
     private final IContactRepository contactRepository;
 
     @Autowired
-    public ContactService(@Qualifier("jdbcContactRepository") IContactRepository contactRepository) {
+    public ContactService(@Qualifier("ContactRepository") IContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
 
@@ -29,14 +29,14 @@ public class ContactService {
     }
 
     public Contact updateContact(Contact contact) {
-		return contactRepository.updateContact(contact);
+        return contactRepository.updateContact(contact);
     }
 
     public void deleteContact(Long id) {
         contactRepository.deleteContact(id);
     }
-    
+
     public Contact addContact(Contact contact) {
-    	return contactRepository.addContact(contact);
+        return contactRepository.addContact(contact);
     }
 }
