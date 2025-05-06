@@ -69,7 +69,16 @@ public class ContactRepository implements IContactRepository {
             if (result.next()) {
                 contact.setId(id);
                 contact.setFirstName(result.getString("first_name"));
-                contact.setLastName(sql);
+                contact.setLastName(result.getString("last_name"));
+                contact.setPhoneNumber(result.getString("phone_number"));
+                contact.setEmail(result.getString("email_address"));
+                contact.setBirthdate(result.getString("birth_date"));
+                contact.setStreet(result.getString("street"));
+                contact.setHouseNumber(result.getString("house_number"));
+                contact.setZip(result.getString("zip_code"));
+                contact.setCity(result.getString("city"));
+                contact.setState(result.getString("state"));
+                contact.setCountry(result.getString("country"));
             }
         } catch (Exception exception) {
 
