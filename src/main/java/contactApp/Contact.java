@@ -35,7 +35,6 @@ public class Contact {
 	private String state;
 	private String country;
 
-	// Obsolet ?
 	private String address;
 
 	public Contact() {
