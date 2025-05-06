@@ -38,8 +38,6 @@ public class Contact {
 	// Obsolet ?
 	private String address;
 
-	private String group;
-
 	public Contact() {
 	}
 
@@ -152,14 +150,6 @@ public class Contact {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-
-	public String getGroup() {
-		return group;
-	}
-
-	public void setGroup(String group) {
-		this.group = group;
 	}
 
 	@Override
