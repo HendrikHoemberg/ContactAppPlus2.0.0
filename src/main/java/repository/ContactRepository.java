@@ -68,8 +68,8 @@ public class ContactRepository implements IContactRepository {
                 ResultSet result = statement.executeQuery(sql)) {
             if (result.next()) {
                 contact.setId(id);
-                contact.setFname(result.getString("first_name"));
-                contact.setLname(sql);
+                contact.setFirstName(result.getString("first_name"));
+                contact.setLastName(sql);
             }
         } catch (Exception exception) {
 

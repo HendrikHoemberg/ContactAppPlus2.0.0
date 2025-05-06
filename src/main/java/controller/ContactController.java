@@ -51,8 +51,8 @@ public class ContactController {
         
         if (optionalContact.isPresent()) {
             Contact contact = optionalContact.get();
-            contact.setFname(contactDetails.getFname());
-            contact.setLname(contactDetails.getLname());
+            contact.setFirstName(contactDetails.getFirstName());
+            contact.setLastName(contactDetails.getLastName());
             contact.setBirthdate(contactDetails.getBirthdate());
             contact.setAddress(contactDetails.getAddress());
             contact.setEmail(contactDetails.getEmail());
