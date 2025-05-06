@@ -1,6 +1,5 @@
 package contactApp;
 
-
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -12,47 +11,45 @@ import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Contact {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @NotBlank(message = "First name is required")
-    private String firstName;
-    
-    @NotBlank(message = "Last name is required")
-    private String lastName;
-    
-    private String birthdate;
-    
-    private String address;
-    
-    private String street;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotBlank(message = "First name is required")
+	private String firstName;
+
+	@NotBlank(message = "Last name is required")
+	private String lastName;
+
+	private String phoneNumber;
+
+	@Email(message = "Please provide a valid email address")
+	private String email;
+
+	private String birthdate;
+	private String street;
 	private String houseNumber;
 	private String zip;
 	private String city;
 	private String state;
 	private String country;
-    
-    @Email(message = "Please provide a valid email address")
-    private String email;
-    
-    private String phoneNumber;
-    
+
+	// Obsolet ?
+	private String address;
+
 	private String group;
 
-    public Contact() {
-    }
+	public Contact() {
+	}
 
-    public Contact(Long id, String fname, String lname, String phoneNumber) {
-        this.id = id;
-        this.firstName = fname;
-        this.lastName = lname;
-        this.phoneNumber = phoneNumber;
-    }
-    
+	public Contact(Long id, String fname, String lname, String phoneNumber) {
+		this.id = id;
+		this.firstName = fname;
+		this.lastName = lname;
+		this.phoneNumber = phoneNumber;
+	}
 
-    
 	public Long getId() {
 		return id;
 	}
@@ -166,28 +163,30 @@ public class Contact {
 	}
 
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Contact contact = (Contact) o;
-        return Objects.equals(id, contact.id);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Contact contact = (Contact) o;
+		return Objects.equals(id, contact.id);
+	}
 
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "id=" + id +
-                ", fname='" + firstName + '\'' +
-                ", lname='" + lastName + '\'' +
-                ", birthdate=" + birthdate +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public String toString() {
+		return "Contact{" +
+				"id=" + id +
+				", fname='" + firstName + '\'' +
+				", lname='" + lastName + '\'' +
+				", birthdate=" + birthdate +
+				", address='" + address + '\'' +
+				", email='" + email + '\'' +
+				", phoneNumber='" + phoneNumber + '\'' +
+				'}';
+	}
 }
