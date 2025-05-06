@@ -1,7 +1,6 @@
 package contactApp;
 
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -19,17 +18,17 @@ public class Contact {
     private Long id;
     
     @NotBlank(message = "First name is required")
-    private String fname;
+    private String firstName;
     
     @NotBlank(message = "Last name is required")
-    private String lname;
+    private String lastName;
     
     private String birthdate;
     
     private String address;
     
     private String street;
-	private String houseNr;
+	private String houseNumber;
 	private String zip;
 	private String city;
 	private String state;
@@ -47,72 +46,54 @@ public class Contact {
 
     public Contact(Long id, String fname, String lname, String phoneNumber) {
         this.id = id;
-        this.fname = fname;
-        this.lname = lname;
+        this.firstName = fname;
+        this.lastName = lname;
         this.phoneNumber = phoneNumber;
     }
     
 
-    public Long getId() {
-        return id;
-    }
     
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getFname() {
-        return fname;
-    }
-    
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
-    
-    public String getLname() {
-        return lname;
-    }
-    
-    public void setLname(String lname) {
-        this.lname = lname;
-    }
-    
+	public Long getId() {
+		return id;
+	}
 
-    public LocalDate getBirthdate() {
-        return birthdate != null ? LocalDate.parse(birthdate) : null;
-    }
-    
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate != null ? birthdate.toString() : null;
-    }
-    
-    public String getAddress() {
-        return address;
-    }
-    
-    public void setAddress(String address) {
-        this.address = address;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public String getStreet() {
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getStreet() {
 		return street;
 	}
 
@@ -120,12 +101,12 @@ public class Contact {
 		this.street = street;
 	}
 
-	public String getHouseNr() {
-		return houseNr;
+	public String getHouseNumber() {
+		return houseNumber;
 	}
 
-	public void setHouseNr(String houseNr) {
-		this.houseNr = houseNr;
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
 	}
 
 	public String getZip() {
@@ -160,16 +141,28 @@ public class Contact {
 		this.country = country;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public String getGroup() {
 		return group;
 	}
 
 	public void setGroup(String group) {
 		this.group = group;
-	}
-
-	public void setBirthdate(String birthdate) {
-		this.birthdate = birthdate;
 	}
 
 	@Override
@@ -189,8 +182,8 @@ public class Contact {
     public String toString() {
         return "Contact{" +
                 "id=" + id +
-                ", fname='" + fname + '\'' +
-                ", lname='" + lname + '\'' +
+                ", fname='" + firstName + '\'' +
+                ", lname='" + lastName + '\'' +
                 ", birthdate=" + birthdate +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +

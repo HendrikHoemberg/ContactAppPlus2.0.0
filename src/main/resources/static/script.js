@@ -48,6 +48,7 @@ function renderContactTable(contacts) {
             <td>${contact.lname}</td>
             <td>${contact.email || ''}</td>
             <td>${contact.phoneNumber || ''}</td>
+			<td>${contact.address || ''}</td>
             <td>
                 <button class="btn btn-sm btn-danger delete-btn" data-id="${contact.id}">
                     <i class="bi bi-trash"></i> Delete
