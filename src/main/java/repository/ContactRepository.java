@@ -14,10 +14,10 @@ import org.springframework.stereotype.Repository;
 import contactApp.Contact;
 
 @Repository("jdbcContactRepository")
-public class JdbcContactRepository implements IContactRepository {
+public class ContactRepository implements IContactRepository {
     private static final String CONNECTION_STRING = "jdbc:sqlite:contactsdb.sqlite";
     
-    public JdbcContactRepository() {
+    public ContactRepository() {
         createTables();
     }
     
