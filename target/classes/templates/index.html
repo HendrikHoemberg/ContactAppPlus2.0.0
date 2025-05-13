@@ -11,6 +11,17 @@
 
 <body>
     <div class="container mt-4">
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050; width: 275px;">
+            <div id="notificationToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" id="toastMessage">
+                        Operation successful
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        
         <h1 class="mb-4">Contact Management</h1>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -45,11 +56,7 @@
                 <ul class="nav nav-tabs card-header-tabs" id="contactTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="show-tab" data-bs-toggle="tab" data-bs-target="#show"
-                            type="button" role="tab" aria-controls="show" aria-selected="true">Show Contact</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button"
-                            role="tab" aria-controls="edit" aria-selected="false">Edit Contact</button>
+                            type="button" role="tab" aria-controls="show" aria-selected="true">Contact Details</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button"
@@ -60,69 +67,41 @@
             <div class="card-body">
                 <div class="tab-content" id="contactTabContent">
                     <div class="tab-pane fade show active" id="show" role="tabpanel" aria-labelledby="show-tab">
-                        <form id="showContactForm">
+                        <form id="contactDetailsForm">
+                            <input type="hidden" id="contact-id">
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="show-first-name" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="show-first-name" readonly>
+                                    <label for="contact-first-name" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="contact-first-name" readonly required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="show-last-name" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="show-last-name" readonly>
+                                    <label for="contact-last-name" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="contact-last-name" readonly required>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="show-date-of-birth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="show-date-of-birth" readonly>
+                                <label for="contact-date-of-birth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="contact-date-of-birth" readonly>
                             </div>
                             <div class="mb-3">
-                                <label for="show-address" class="form-label">Address</label>
-                                <textarea class="form-control" id="show-address" rows="2" readonly></textarea>
+                                <label for="contact-address" class="form-label">Address</label>
+                                <textarea class="form-control" id="contact-address" rows="2" readonly></textarea>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="show-email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="show-email" readonly>
+                                    <label for="contact-email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contact-email" readonly>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="show-phone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="show-phone" readonly>
+                                    <label for="contact-phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="contact-phone" readonly>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
-                        <form id="editContactForm">
-                            <input type="hidden" id="edit-id">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="edit-first-name" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="edit-first-name" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="edit-last-name" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="edit-last-name" required>
-                                </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-primary" id="editContactBtn">Edit Contact</button>
+                                <button type="submit" class="btn btn-success d-none" id="applyChangesBtn">Apply Changes</button>
+                                <button type="button" class="btn btn-secondary d-none" id="cancelEditBtn">Cancel</button>
                             </div>
-                            <div class="mb-3">
-                                <label for="edit-date-of-birth" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="edit-date-of-birth">
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-address" class="form-label">Address</label>
-                                <textarea class="form-control" id="edit-address" rows="2"></textarea>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="edit-email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="edit-email">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="edit-phone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="edit-phone">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
                         </form>
                     </div>
 

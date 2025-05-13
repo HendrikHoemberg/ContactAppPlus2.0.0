@@ -1,31 +1,79 @@
-const contactTableBody = document.getElementById('contactTableBody');
-const showContactForm = document.getElementById('showContactForm');
-const editContactForm = document.getElementById('editContactForm');
+function showNotification(message, type = 'success') {
+    const toast = document.getElementById('notificationToast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toastMessage.textContent = message;
+    
+    toast.classList.remove('bg-success', 'bg-danger');
+    toast.classList.add(type === 'success' ? 'bg-success' : 'bg-danger');
+    
+    window.contactToast.show();
+}const contactTableBody = document.getElementById('contactTableBody');
+const contactDetailsForm = document.getElementById('contactDetailsForm');
 const newContactForm = document.getElementById('newContactForm');
 const contactFilter = document.getElementById('contactFilter');
 const clearFilterBtn = document.getElementById('clearFilter');
 
+const editContactBtn = document.getElementById('editContactBtn');
+const applyChangesBtn = document.getElementById('applyChangesBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
 
 const showTab = document.getElementById('show-tab');
-const editTab = document.getElementById('edit-tab');
 const newTab = document.getElementById('new-tab');
-
 
 let currentContactId = null;
 let allContacts = []; 
-
+let isEditMode = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadContacts();
     
-
-    editContactForm.addEventListener('submit', handleEditContact);
+    contactDetailsForm.addEventListener('submit', handleContactUpdate);
     newContactForm.addEventListener('submit', handleNewContact);
     
     contactFilter.addEventListener('input', filterContacts);
     clearFilterBtn.addEventListener('click', clearFilter);
+    
+    editContactBtn.addEventListener('click', enableEditMode);
+    cancelEditBtn.addEventListener('click', disableEditMode);
+    
+    window.contactToast = new bootstrap.Toast(document.getElementById('notificationToast'), {
+        delay: 1500
+    });
 });
 
+function enableEditMode() {
+    isEditMode = true;
+    
+    const formInputs = contactDetailsForm.querySelectorAll('input, textarea');
+    formInputs.forEach(input => {
+        input.readOnly = false;
+    });
+    
+    editContactBtn.classList.add('d-none');
+    applyChangesBtn.classList.remove('d-none');
+    cancelEditBtn.classList.remove('d-none');
+}
+
+function disableEditMode() {
+    isEditMode = false;
+    
+    const formInputs = contactDetailsForm.querySelectorAll('input, textarea');
+    formInputs.forEach(input => {
+        input.readOnly = true;
+    });
+    
+    editContactBtn.classList.remove('d-none');
+    applyChangesBtn.classList.add('d-none');
+    cancelEditBtn.classList.add('d-none');
+    
+    if (currentContactId) {
+        const currentContact = allContacts.find(contact => contact.id == currentContactId);
+        if (currentContact) {
+            populateContactForm(currentContact);
+        }
+    }
+}
 
 async function loadContacts() {
     try {
@@ -35,7 +83,6 @@ async function loadContacts() {
         allContacts = contacts;
         renderContactTable(contacts);
         
-
         if (contacts.length > 0) {
             selectContact(contacts[0]);
         }
@@ -43,7 +90,6 @@ async function loadContacts() {
         console.error('Error loading contacts:', error);
     }
 }
-
 
 function renderContactTable(contacts) {
     contactTableBody.innerHTML = '';
@@ -64,23 +110,18 @@ function renderContactTable(contacts) {
             </td>
         `;
         
-
         row.addEventListener('click', (e) => {
-
             if (e.target.closest('.delete-btn')) return;
             
-
             selectContact(contact);
         });
         
-
         const deleteBtn = row.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', () => deleteContact(contact.id));
         
         contactTableBody.appendChild(row);
     });
 }
-
 
 function filterContacts() {
     const filterValue = contactFilter.value.toLowerCase().trim();
@@ -109,7 +150,6 @@ function filterContacts() {
     }
 }
 
-
 function clearFilter() {
     contactFilter.value = '';
     renderContactTable(allContacts);
@@ -119,11 +159,16 @@ function clearFilter() {
     }
 }
 
-
 function selectContact(contact) {
+    if (isEditMode) {
+        if (!confirm('You have unsaved changes. Do you want to continue?')) {
+            return;
+        }
+        disableEditMode();
+    }
+    
     currentContactId = contact.id;
     
-
     const rows = contactTableBody.querySelectorAll('tr');
     rows.forEach(row => row.classList.remove('table-primary'));
     
@@ -135,40 +180,33 @@ function selectContact(contact) {
         selectedRow.classList.add('table-primary');
     }
     
-
-    document.getElementById('show-first-name').value = contact.firstName;
-    document.getElementById('show-last-name').value = contact.lastName;
-    document.getElementById('show-date-of-birth').value = contact.dateOfBirth || '';
-    document.getElementById('show-address').value = contact.address || '';
-    document.getElementById('show-email').value = contact.email || '';
-    document.getElementById('show-phone').value = contact.phoneNumber || '';
+    populateContactForm(contact);
     
-
-    document.getElementById('edit-id').value = contact.id;
-    document.getElementById('edit-first-name').value = contact.firstName;
-    document.getElementById('edit-last-name').value = contact.lastName;
-    document.getElementById('edit-date-of-birth').value = contact.dateOfBirth || '';
-    document.getElementById('edit-address').value = contact.address || '';
-    document.getElementById('edit-email').value = contact.email || '';
-    document.getElementById('edit-phone').value = contact.phoneNumber || '';
-    
-
     const showTabInstance = new bootstrap.Tab(showTab);
     showTabInstance.show();
 }
 
+function populateContactForm(contact) {
+    document.getElementById('contact-id').value = contact.id;
+    document.getElementById('contact-first-name').value = contact.firstName;
+    document.getElementById('contact-last-name').value = contact.lastName;
+    document.getElementById('contact-date-of-birth').value = contact.dateOfBirth || '';
+    document.getElementById('contact-address').value = contact.address || '';
+    document.getElementById('contact-email').value = contact.email || '';
+    document.getElementById('contact-phone').value = contact.phoneNumber || '';
+}
 
-async function handleEditContact(e) {
+async function handleContactUpdate(e) {
     e.preventDefault();
     
     const contactData = {
-        id: document.getElementById('edit-id').value,
-        firstName: document.getElementById('edit-first-name').value,
-        lastName: document.getElementById('edit-last-name').value,
-        phoneNumber: document.getElementById('edit-phone').value,
-        email: document.getElementById('edit-email').value,
-        address: document.getElementById('edit-address').value,
-        dateOfBirth: document.getElementById('edit-date-of-birth').value || null
+        id: document.getElementById('contact-id').value,
+        firstName: document.getElementById('contact-first-name').value,
+        lastName: document.getElementById('contact-last-name').value,
+        phoneNumber: document.getElementById('contact-phone').value,
+        email: document.getElementById('contact-email').value,
+        address: document.getElementById('contact-address').value,
+        dateOfBirth: document.getElementById('contact-date-of-birth').value || null
     };
     
     try {
@@ -181,19 +219,15 @@ async function handleEditContact(e) {
         });
         
         if (response.ok) {
-
             loadContacts();
-            alert('Contact updated successfully');
-            
-
-            const showTabInstance = new bootstrap.Tab(showTab);
-            showTabInstance.show();
+            showNotification('Contact updated successfully');
+            disableEditMode();
         } else {
-            alert('Failed to update contact');
+            showNotification('Failed to update contact', 'error');
         }
     } catch (error) {
         console.error('Error updating contact:', error);
-        alert('An error occurred while updating the contact');
+        showNotification('An error occurred while updating the contact', 'error');
     }
 }
 
@@ -219,25 +253,24 @@ async function handleNewContact(e) {
         });
         
         if (response.ok) {
-
             const newContact = await response.json();
             loadContacts();
-            alert('Contact created successfully');
+            showNotification('Contact created successfully');
             
-
             newContactForm.reset();
             
-
             currentContactId = newContact.id;
+            
+            const showTabInstance = new bootstrap.Tab(showTab);
+            showTabInstance.show();
         } else {
-            alert('Failed to create contact');
+            showNotification('Failed to create contact', 'error');
         }
     } catch (error) {
         console.error('Error creating contact:', error);
-        alert('An error occurred while creating the contact');
+        showNotification('An error occurred while creating the contact', 'error');
     }
 }
-
 
 async function deleteContact(id) {
     if (!confirm('Are you sure you want to delete this contact?')) {
@@ -250,40 +283,32 @@ async function deleteContact(id) {
         });
         
         if (response.ok) {
-
             loadContacts();
-            alert('Contact deleted successfully');
+            showNotification('Contact deleted successfully');
             
-
             if (currentContactId === id) {
                 clearForms();
                 currentContactId = null;
             }
         } else {
-            alert('Failed to delete contact');
+            showNotification('Failed to delete contact', 'error');
         }
     } catch (error) {
         console.error('Error deleting contact:', error);
-        alert('An error occurred while deleting the contact');
+        showNotification('An error occurred while deleting the contact', 'error');
     }
 }
 
-
 function clearForms() {
-
-    document.getElementById('show-first-name').value = '';
-    document.getElementById('show-last-name').value = '';
-    document.getElementById('show-date-of-birth').value = '';
-    document.getElementById('show-address').value = '';
-    document.getElementById('show-email').value = '';
-    document.getElementById('show-phone').value = '';
+    document.getElementById('contact-id').value = '';
+    document.getElementById('contact-first-name').value = '';
+    document.getElementById('contact-last-name').value = '';
+    document.getElementById('contact-date-of-birth').value = '';
+    document.getElementById('contact-address').value = '';
+    document.getElementById('contact-email').value = '';
+    document.getElementById('contact-phone').value = '';
     
-
-    document.getElementById('edit-id').value = '';
-    document.getElementById('edit-first-name').value = '';
-    document.getElementById('edit-last-name').value = '';
-    document.getElementById('edit-date-of-birth').value = '';
-    document.getElementById('edit-address').value = '';
-    document.getElementById('edit-email').value = '';
-    document.getElementById('edit-phone').value = '';
+    if (isEditMode) {
+        disableEditMode();
+    }
 }
