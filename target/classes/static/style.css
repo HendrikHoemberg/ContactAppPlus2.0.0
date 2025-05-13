@@ -28,7 +28,27 @@ body {
     background-color: #f2f7ff;
 }
 
+.table-responsive {
+    max-height: 225px;
+    overflow-y: auto;
+}
+
+
+
 .form-control:read-only {
     background-color: #f8f9fa;
     cursor: default;
+}
+
+#contactFilter {
+    transition: all 0.2s;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none; 
+    outline: none; 
+}
+
+#clearFilter {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }

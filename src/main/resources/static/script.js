@@ -2,6 +2,8 @@ const contactTableBody = document.getElementById('contactTableBody');
 const showContactForm = document.getElementById('showContactForm');
 const editContactForm = document.getElementById('editContactForm');
 const newContactForm = document.getElementById('newContactForm');
+const contactFilter = document.getElementById('contactFilter');
+const clearFilterBtn = document.getElementById('clearFilter');
 
 
 const showTab = document.getElementById('show-tab');
@@ -10,6 +12,7 @@ const newTab = document.getElementById('new-tab');
 
 
 let currentContactId = null;
+let allContacts = []; 
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     editContactForm.addEventListener('submit', handleEditContact);
     newContactForm.addEventListener('submit', handleNewContact);
+    
+    contactFilter.addEventListener('input', filterContacts);
+    clearFilterBtn.addEventListener('click', clearFilter);
 });
 
 
@@ -26,6 +32,7 @@ async function loadContacts() {
         const response = await fetch('/api/contacts');
         const contacts = await response.json();
         
+        allContacts = contacts;
         renderContactTable(contacts);
         
 
@@ -46,10 +53,10 @@ function renderContactTable(contacts) {
         row.innerHTML = `
             <td>${contact.firstName}</td>
             <td>${contact.lastName}</td>
-            <td>${contact.email || ''}</td>
             <td>${contact.phoneNumber || ''}</td>
-			<td>${contact.address || ''}</td>
-			<td>${contact.dateOfBirth || ''}</td>
+            <td>${contact.email || ''}</td>
+            <td>${contact.address || ''}</td>
+            <td>${contact.dateOfBirth || ''}</td>
             <td>
                 <button class="btn btn-sm btn-danger delete-btn" data-id="${contact.id}">
                     <i class="bi bi-trash"></i> Delete
@@ -75,6 +82,44 @@ function renderContactTable(contacts) {
 }
 
 
+function filterContacts() {
+    const filterValue = contactFilter.value.toLowerCase().trim();
+    
+    if (!filterValue) {
+        renderContactTable(allContacts);
+        return;
+    }
+    
+    const filteredContacts = allContacts.filter(contact => {
+        return (
+            contact.firstName.toLowerCase().includes(filterValue) ||
+            contact.lastName.toLowerCase().includes(filterValue) ||
+            (contact.phoneNumber && contact.phoneNumber.toLowerCase().includes(filterValue)) ||
+            (contact.email && contact.email.toLowerCase().includes(filterValue)) ||
+            (contact.address && contact.address.toLowerCase().includes(filterValue))
+        );
+    });
+    
+    renderContactTable(filteredContacts);
+    
+    if (filteredContacts.length > 0) {
+        selectContact(filteredContacts[0]);
+    } else {
+        clearForms();
+    }
+}
+
+
+function clearFilter() {
+    contactFilter.value = '';
+    renderContactTable(allContacts);
+    
+    if (allContacts.length > 0) {
+        selectContact(allContacts[0]);
+    }
+}
+
+
 function selectContact(contact) {
     currentContactId = contact.id;
     
@@ -93,7 +138,7 @@ function selectContact(contact) {
 
     document.getElementById('show-first-name').value = contact.firstName;
     document.getElementById('show-last-name').value = contact.lastName;
-    document.getElementById('show-date-of-birth').value = contact.date-of-birth || '';
+    document.getElementById('show-date-of-birth').value = contact.dateOfBirth || '';
     document.getElementById('show-address').value = contact.address || '';
     document.getElementById('show-email').value = contact.email || '';
     document.getElementById('show-phone').value = contact.phoneNumber || '';
@@ -102,7 +147,7 @@ function selectContact(contact) {
     document.getElementById('edit-id').value = contact.id;
     document.getElementById('edit-first-name').value = contact.firstName;
     document.getElementById('edit-last-name').value = contact.lastName;
-    document.getElementById('edit-date-of-birth').value = contact.date-of-birth || '';
+    document.getElementById('edit-date-of-birth').value = contact.dateOfBirth || '';
     document.getElementById('edit-address').value = contact.address || '';
     document.getElementById('edit-email').value = contact.email || '';
     document.getElementById('edit-phone').value = contact.phoneNumber || '';

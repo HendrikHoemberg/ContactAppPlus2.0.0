@@ -13,8 +13,12 @@
     <div class="container mt-4">
         <h1 class="mb-4">Contact Management</h1>
         <div class="card mb-4">
-            <div class="card-header">
-                <h5>Contact List</h5>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Contact List</h5>
+                <div class="input-group input-group-sm" style="max-width: 300px;">
+                    <input type="text" id="contactFilter" class="form-control" placeholder="Filter contacts...">
+                    <button class="btn btn-outline-secondary" type="button" id="clearFilter">Clear</button>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

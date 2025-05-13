@@ -66,11 +66,11 @@ public class ContactRepository implements IContactRepository {
 
     public Optional<Contact> getContactById(Long id) {
         String sql = "SELECT * FROM contacts WHERE id = " + id;
-        Contact contact = new Contact();
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
                 Statement statement = conn.createStatement();
                 ResultSet result = statement.executeQuery(sql)) {
             if (result.next()) {
+                Contact contact = new Contact();
                 contact.setId(id);
                 contact.setFirstName(result.getString("first_name"));
                 contact.setLastName(result.getString("last_name"));
@@ -78,11 +78,14 @@ public class ContactRepository implements IContactRepository {
                 contact.setEmail(result.getString("email_address"));
                 contact.setAddress(result.getString("address"));
                 contact.setDateOfBirth(result.getString("date_of_birth"));
+                return Optional.of(contact);
+            } else {
+                return Optional.empty();
             }
         } catch (Exception exception) {
             exception.printStackTrace();
+            return Optional.empty();
         }
-        return Optional.of(contact);
     }
 
     public void deleteContact(Long id) {
