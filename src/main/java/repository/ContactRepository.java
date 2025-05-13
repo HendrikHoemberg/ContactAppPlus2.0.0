@@ -64,7 +64,7 @@ public class ContactRepository implements IContactRepository {
         return contacts;
     }
 
-    public Optional<Contact> getContactById(Long id) {
+    public Contact getContactById(Long id) {
         String sql = "SELECT * FROM contacts WHERE contact_id = " + id;
         Contact contact = new Contact();
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -76,13 +76,13 @@ public class ContactRepository implements IContactRepository {
                 contact.setLastName(result.getString("last_name"));
                 contact.setPhoneNumber(result.getString("phone_number"));
                 contact.setEmail(result.getString("email_address"));
-                contact.setDateOfBirth(result.getString("date_of_birth"));
                 contact.setAddress(result.getString("address"));
+                contact.setDateOfBirth(result.getString("date_of_birth"));
             }
         } catch (Exception exception) {
 
         }
-        return null;
+        return contact;
     }
 
     public void deleteContact(Long id) {
