@@ -1,4 +1,1 @@
-Show Contact: Address mail and phone not shown
-Edit Contact: all fields blank despite selecting a contact.
-
-Falls Zeit: Table-filter
+Merge Show Contact + Edit Contact: "Edit Contact" button in Show contact makes the fields editable. Save with "Apply Changes" button
