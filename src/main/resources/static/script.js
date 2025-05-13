@@ -84,6 +84,13 @@ async function loadContacts() {
         renderContactTable(contacts);
         
         if (contacts.length > 0) {
+            if (currentContactId) {
+                const contactToSelect = contacts.find(contact => contact.id == currentContactId);
+                if (contactToSelect) {
+                    selectContact(contactToSelect);
+                    return;
+                }
+            }
             selectContact(contacts[0]);
         }
     } catch (error) {
@@ -144,6 +151,13 @@ function filterContacts() {
     renderContactTable(filteredContacts);
     
     if (filteredContacts.length > 0) {
+        if (currentContactId) {
+            const currentInFiltered = filteredContacts.find(contact => contact.id == currentContactId);
+            if (currentInFiltered) {
+                selectContact(currentInFiltered);
+                return;
+            }
+        }
         selectContact(filteredContacts[0]);
     } else {
         clearForms();
@@ -155,6 +169,13 @@ function clearFilter() {
     renderContactTable(allContacts);
     
     if (allContacts.length > 0) {
+        if (currentContactId) {
+            const contactToSelect = allContacts.find(contact => contact.id == currentContactId);
+            if (contactToSelect) {
+                selectContact(contactToSelect);
+                return;
+            }
+        }
         selectContact(allContacts[0]);
     }
 }
@@ -178,6 +199,7 @@ function selectContact(contact) {
     
     if (selectedRow) {
         selectedRow.classList.add('table-primary');
+        selectedRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
     
     populateContactForm(contact);
@@ -219,6 +241,8 @@ async function handleContactUpdate(e) {
         });
         
         if (response.ok) {
+            const updatedContact = await response.json();
+            currentContactId = updatedContact.id;
             loadContacts();
             showNotification('Contact updated successfully');
             disableEditMode();
@@ -254,12 +278,11 @@ async function handleNewContact(e) {
         
         if (response.ok) {
             const newContact = await response.json();
+            currentContactId = newContact.id;
             loadContacts();
             showNotification('Contact created successfully');
             
             newContactForm.reset();
-            
-            currentContactId = newContact.id;
             
             const showTabInstance = new bootstrap.Tab(showTab);
             showTabInstance.show();
@@ -283,12 +306,14 @@ async function deleteContact(id) {
         });
         
         if (response.ok) {
+            if (currentContactId === id) {
+                currentContactId = null;
+            }
             loadContacts();
             showNotification('Contact deleted successfully');
             
             if (currentContactId === id) {
                 clearForms();
-                currentContactId = null;
             }
         } else {
             showNotification('Failed to delete contact', 'error');

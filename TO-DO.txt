@@ -1,1 +1,1 @@
-Merge Show Contact + Edit Contact: "Edit Contact" button in Show contact makes the fields editable. Save with "Apply Changes" button
+- addContact in ContactRepository needs to return the ID as well

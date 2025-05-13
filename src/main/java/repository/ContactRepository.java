@@ -99,7 +99,7 @@ public class ContactRepository implements IContactRepository {
     }
 
     @Override
-    public Contact addContact(Contact contact) {
+    public Contact addContact(Contact contact) { // TO-DO: Needs to return the ID as well
         String sql = "INSERT INTO contacts (first_name, last_name, phone_number, email_address, address, date_of_birth)"
                 +
                 "VALUES (?, ?, ?, ?, ?, ?)";
