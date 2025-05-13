@@ -3,34 +3,40 @@ const showContactForm = document.getElementById('showContactForm');
 const editContactForm = document.getElementById('editContactForm');
 const newContactForm = document.getElementById('newContactForm');
 
+
 const showTab = document.getElementById('show-tab');
 const editTab = document.getElementById('edit-tab');
 const newTab = document.getElementById('new-tab');
 
+
 let currentContactId = null;
-let contactsCache = [];
+
 
 document.addEventListener('DOMContentLoaded', () => {
     loadContacts();
     
+
     editContactForm.addEventListener('submit', handleEditContact);
     newContactForm.addEventListener('submit', handleNewContact);
 });
 
+
 async function loadContacts() {
     try {
         const response = await fetch('/api/contacts');
-        contactsCache = await response.json();
+        const contacts = await response.json();
         
-        renderContactTable(contactsCache);
+        renderContactTable(contacts);
         
-        if (contactsCache.length > 0) {
-            selectContact(contactsCache[0]);
+
+        if (contacts.length > 0) {
+            selectContact(contacts[0]);
         }
     } catch (error) {
         console.error('Error loading contacts:', error);
     }
 }
+
 
 function renderContactTable(contacts) {
     contactTableBody.innerHTML = '';
@@ -38,11 +44,12 @@ function renderContactTable(contacts) {
     contacts.forEach(contact => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${contact.firstName}</td>
-            <td>${contact.lastName}</td>
+            <td>${contact.fname}</td>
+            <td>${contact.lname}</td>
             <td>${contact.email || ''}</td>
             <td>${contact.phoneNumber || ''}</td>
-            <td>${contact.address || ''}</td>
+			<td>${contact.address || ''}</td>
+			<td>${contact.dateOfBirth || ''}</td>
             <td>
                 <button class="btn btn-sm btn-danger delete-btn" data-id="${contact.id}">
                     <i class="bi bi-trash"></i> Delete
@@ -50,11 +57,16 @@ function renderContactTable(contacts) {
             </td>
         `;
         
+
         row.addEventListener('click', (e) => {
+
             if (e.target.closest('.delete-btn')) return;
+            
+
             selectContact(contact);
         });
         
+
         const deleteBtn = row.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', () => deleteContact(contact.id));
         
@@ -62,9 +74,11 @@ function renderContactTable(contacts) {
     });
 }
 
+
 function selectContact(contact) {
     currentContactId = contact.id;
     
+
     const rows = contactTableBody.querySelectorAll('tr');
     rows.forEach(row => row.classList.remove('table-primary'));
     
@@ -76,36 +90,40 @@ function selectContact(contact) {
         selectedRow.classList.add('table-primary');
     }
     
-    document.getElementById('show-firstName').value = contact.firstName;
-    document.getElementById('show-lastName').value = contact.lastName;
-    document.getElementById('show-birthdate').value = contact.birthdate || '';
+
+    document.getElementById('show-fname').value = contact.fname;
+    document.getElementById('show-lname').value = contact.lname;
+    document.getElementById('show-date-of-birth').value = contact.date-of-birth || '';
     document.getElementById('show-address').value = contact.address || '';
     document.getElementById('show-email').value = contact.email || '';
     document.getElementById('show-phone').value = contact.phoneNumber || '';
     
+
     document.getElementById('edit-id').value = contact.id;
-    document.getElementById('edit-firstName').value = contact.firstName;
-    document.getElementById('edit-lastName').value = contact.lastName;
-    document.getElementById('edit-birthdate').value = contact.birthdate || '';
+    document.getElementById('edit-fname').value = contact.fname;
+    document.getElementById('edit-lname').value = contact.lname;
+    document.getElementById('edit-date-of-birth').value = contact.date-of-birth || '';
     document.getElementById('edit-address').value = contact.address || '';
     document.getElementById('edit-email').value = contact.email || '';
     document.getElementById('edit-phone').value = contact.phoneNumber || '';
     
+
     const showTabInstance = new bootstrap.Tab(showTab);
     showTabInstance.show();
 }
+
 
 async function handleEditContact(e) {
     e.preventDefault();
     
     const contactData = {
         id: document.getElementById('edit-id').value,
-        firstName: document.getElementById('edit-firstName').value,
-        lastName: document.getElementById('edit-lastName').value,
-        birthdate: document.getElementById('edit-birthdate').value || null,
-        address: document.getElementById('edit-address').value,
+        fname: document.getElementById('edit-fname').value,
+        lname: document.getElementById('edit-lname').value,
+        phoneNumber: document.getElementById('edit-phone').value,
         email: document.getElementById('edit-email').value,
-        phoneNumber: document.getElementById('edit-phone').value
+        address: document.getElementById('edit-address').value,
+        dateOfBirth: document.getElementById('edit-date-of-birth').value || null
     };
     
     try {
@@ -118,19 +136,11 @@ async function handleEditContact(e) {
         });
         
         if (response.ok) {
-            const updatedContact = await response.json();
-            const index = contactsCache.findIndex(c => c.id == contactData.id);
-            
-            if (index !== -1) {
-                contactsCache[index] = updatedContact;
-            }
 
-            renderContactTable(contactsCache);
-            
-            selectContact(updatedContact);
-            
+            loadContacts();
             alert('Contact updated successfully');
             
+
             const showTabInstance = new bootstrap.Tab(showTab);
             showTabInstance.show();
         } else {
@@ -146,12 +156,12 @@ async function handleNewContact(e) {
     e.preventDefault();
     
     const contactData = {
-        firstName: document.getElementById('new-firstName').value,
-        lastName: document.getElementById('new-lastName').value,
-        birthdate: document.getElementById('new-birthdate').value || null,
-        address: document.getElementById('new-address').value,
+        fname: document.getElementById('new-fname').value,
+        lname: document.getElementById('new-lname').value,
+        phoneNumber: document.getElementById('new-phone').value,
         email: document.getElementById('new-email').value,
-        phoneNumber: document.getElementById('new-phone').value
+        address: document.getElementById('new-address').value,
+        dateOfBirth: document.getElementById('new-date-of-birth').value || null
     };
     
     try {
@@ -164,17 +174,16 @@ async function handleNewContact(e) {
         });
         
         if (response.ok) {
-            const newContact = await response.json();
 
-            contactsCache.push(newContact);
-            
-            renderContactTable(contactsCache);
-            
+            const newContact = await response.json();
+            loadContacts();
             alert('Contact created successfully');
             
+
             newContactForm.reset();
             
-            selectContact(newContact);
+
+            currentContactId = newContact.id;
         } else {
             alert('Failed to create contact');
         }
@@ -183,6 +192,7 @@ async function handleNewContact(e) {
         alert('An error occurred while creating the contact');
     }
 }
+
 
 async function deleteContact(id) {
     if (!confirm('Are you sure you want to delete this contact?')) {
@@ -195,19 +205,14 @@ async function deleteContact(id) {
         });
         
         if (response.ok) {
-            contactsCache = contactsCache.filter(contact => contact.id != id);
-            
-            renderContactTable(contactsCache);
-            
+
+            loadContacts();
             alert('Contact deleted successfully');
             
-            if (currentContactId == id) {
+
+            if (currentContactId === id) {
                 clearForms();
                 currentContactId = null;
-                
-                if (contactsCache.length > 0) {
-                    selectContact(contactsCache[0]);
-                }
             }
         } else {
             alert('Failed to delete contact');
@@ -218,18 +223,21 @@ async function deleteContact(id) {
     }
 }
 
+
 function clearForms() {
-    document.getElementById('show-firstName').value = '';
-    document.getElementById('show-lastName').value = '';
-    document.getElementById('show-birthdate').value = '';
+
+    document.getElementById('show-fname').value = '';
+    document.getElementById('show-lname').value = '';
+    document.getElementById('show-date-of-birth').value = '';
     document.getElementById('show-address').value = '';
     document.getElementById('show-email').value = '';
     document.getElementById('show-phone').value = '';
     
+
     document.getElementById('edit-id').value = '';
-    document.getElementById('edit-firstName').value = '';
-    document.getElementById('edit-lastName').value = '';
-    document.getElementById('edit-birthdate').value = '';
+    document.getElementById('edit-fname').value = '';
+    document.getElementById('edit-lname').value = '';
+    document.getElementById('edit-date-of-birth').value = '';
     document.getElementById('edit-address').value = '';
     document.getElementById('edit-email').value = '';
     document.getElementById('edit-phone').value = '';
