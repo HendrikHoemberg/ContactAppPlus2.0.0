@@ -27,10 +27,10 @@ public class ContactRepository implements IContactRepository {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "first_name TEXT NOT NULL,\n" +
                 "last_name TEXT NOT NULL,\n" +
-                "phone_number TEXT\n" +
+                "phone_number TEXT,\n" +
                 "email_address TEXT,\n" +
                 "address TEXT,\n" +
-                "date_of_birth TEXT,\n" +
+                "date_of_birth TEXT" +
                 ");";
 
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -64,8 +64,8 @@ public class ContactRepository implements IContactRepository {
         return contacts;
     }
 
-    public Contact getContactById(Long id) {
-        String sql = "SELECT * FROM contacts WHERE contact_id = " + id;
+    public Optional<Contact> getContactById(Long id) {
+        String sql = "SELECT * FROM contacts WHERE id = " + id;
         Contact contact = new Contact();
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
                 Statement statement = conn.createStatement();
@@ -80,9 +80,9 @@ public class ContactRepository implements IContactRepository {
                 contact.setDateOfBirth(result.getString("date_of_birth"));
             }
         } catch (Exception exception) {
-
+            exception.printStackTrace();
         }
-        return contact;
+        return Optional.of(contact);
     }
 
     public void deleteContact(Long id) {
@@ -97,7 +97,7 @@ public class ContactRepository implements IContactRepository {
 
     @Override
     public Contact addContact(Contact contact) {
-        String sql = "INSERT INTO contacts (first_name, last_name, phone_number, email_address, address, date_of_birth"
+        String sql = "INSERT INTO contacts (first_name, last_name, phone_number, email_address, address, date_of_birth)"
                 +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -111,15 +111,28 @@ public class ContactRepository implements IContactRepository {
 
             stmt.executeUpdate();
         } catch (Exception exception) {
-
+            exception.printStackTrace();
         }
         return contact;
     }
 
     @Override
     public Contact updateContact(Contact contact) {
-        String sql = "";
-        // TO-DO
-        throw new UnsupportedOperationException("Unimplemented method 'updateContact'");
+        String sql = "UPDATE contacts SET first_name = ?, last_name = ?, phone_number = ?, email_address = ?, address = ?, date_of_birth = ? WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, contact.getFirstName());
+            stmt.setString(2, contact.getLastName());
+            stmt.setString(3, contact.getPhoneNumber());
+            stmt.setString(4, contact.getEmail());
+            stmt.setString(5, contact.getAddress());
+            stmt.setString(6, contact.getDateOfBirth());
+            stmt.setLong(7, contact.getId());
+
+            stmt.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return contact;
     }
 }

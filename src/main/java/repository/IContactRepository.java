@@ -10,7 +10,7 @@ public interface IContactRepository {
 
     List<Contact> getAllContacts();
 
-    Contact getContactById(Long id);
+    Optional<Contact> getContactById(Long id);
 
     Contact updateContact(Contact contact);
 

@@ -1,0 +1,4 @@
+Show Contact: Address mail and phone not shown
+Edit Contact: all fields blank despite selecting a contact.
+
+Falls Zeit: Table-filter
