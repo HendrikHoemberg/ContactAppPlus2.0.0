@@ -53,10 +53,10 @@ public class ContactController {
             Contact contact = optionalContact.get();
             contact.setFirstName(contactDetails.getFirstName());
             contact.setLastName(contactDetails.getLastName());
-            contact.setBirthdate(contactDetails.getBirthdate());
-            contact.setAddress(contactDetails.getAddress());
-            contact.setEmail(contactDetails.getEmail());
             contact.setPhoneNumber(contactDetails.getPhoneNumber());
+            contact.setEmail(contactDetails.getEmail());
+            contact.setAddress(contactDetails.getAddress());
+            contact.setDateOfBirth(contactDetails.getDateOfBirth());
             
             return ResponseEntity.ok(contactService.updateContact(contact));
         } else {

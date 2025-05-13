@@ -27,15 +27,9 @@ public class Contact {
 	@Email(message = "Please provide a valid email address")
 	private String email;
 
-	private String birthdate;
-	private String street;
-	private String houseNumber;
-	private String zip;
-	private String city;
-	private String state;
-	private String country;
-
 	private String address;
+	
+	private String dateOfBirth;
 
 	public Contact() {
 	}
@@ -71,68 +65,12 @@ public class Contact {
 		this.lastName = lastName;
 	}
 
-	public String getBirthdate() {
-		return birthdate;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setBirthdate(String birthdate) {
-		this.birthdate = birthdate;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getHouseNumber() {
-		return houseNumber;
-	}
-
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
-	}
-
-	public String getZip() {
-		return zip;
-	}
-
-	public void setZip(String zip) {
-		this.zip = zip;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -143,12 +81,20 @@ public class Contact {
 		this.email = email;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	public String getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	@Override
@@ -172,7 +118,7 @@ public class Contact {
 				"id=" + id +
 				", fname='" + firstName + '\'' +
 				", lname='" + lastName + '\'' +
-				", birthdate=" + birthdate +
+				", birthdate=" + dateOfBirth +
 				", address='" + address + '\'' +
 				", email='" + email + '\'' +
 				", phoneNumber='" + phoneNumber + '\'' +
