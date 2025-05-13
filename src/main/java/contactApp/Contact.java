@@ -34,11 +34,17 @@ public class Contact {
 	public Contact() {
 	}
 
-	public Contact(Long id, String fname, String lname, String phoneNumber) {
+	public Contact(Long id, @NotBlank(message = "First name is required") String firstName,
+			@NotBlank(message = "Last name is required") String lastName, String phoneNumber,
+			@Email(message = "Please provide a valid email address") String email, String address, String dateOfBirth) {
+		super();
 		this.id = id;
-		this.firstName = fname;
-		this.lastName = lname;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.address = address;
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public Long getId() {
