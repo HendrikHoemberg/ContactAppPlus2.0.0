@@ -49,6 +49,7 @@ function renderContactTable(contacts) {
             <td>${contact.email || ''}</td>
             <td>${contact.phoneNumber || ''}</td>
 			<td>${contact.address || ''}</td>
+			<td>${contact.dateOfBirth || ''}</td>
             <td>
                 <button class="btn btn-sm btn-danger delete-btn" data-id="${contact.id}">
                     <i class="bi bi-trash"></i> Delete
@@ -92,7 +93,7 @@ function selectContact(contact) {
 
     document.getElementById('show-fname').value = contact.fname;
     document.getElementById('show-lname').value = contact.lname;
-    document.getElementById('show-birthdate').value = contact.birthdate || '';
+    document.getElementById('show-date-of-birth').value = contact.date-of-birth || '';
     document.getElementById('show-address').value = contact.address || '';
     document.getElementById('show-email').value = contact.email || '';
     document.getElementById('show-phone').value = contact.phoneNumber || '';
@@ -101,7 +102,7 @@ function selectContact(contact) {
     document.getElementById('edit-id').value = contact.id;
     document.getElementById('edit-fname').value = contact.fname;
     document.getElementById('edit-lname').value = contact.lname;
-    document.getElementById('edit-birthdate').value = contact.birthdate || '';
+    document.getElementById('edit-date-of-birth').value = contact.date-of-birth || '';
     document.getElementById('edit-address').value = contact.address || '';
     document.getElementById('edit-email').value = contact.email || '';
     document.getElementById('edit-phone').value = contact.phoneNumber || '';
@@ -119,10 +120,10 @@ async function handleEditContact(e) {
         id: document.getElementById('edit-id').value,
         fname: document.getElementById('edit-fname').value,
         lname: document.getElementById('edit-lname').value,
-        birthdate: document.getElementById('edit-birthdate').value || null,
-        address: document.getElementById('edit-address').value,
+        phoneNumber: document.getElementById('edit-phone').value,
         email: document.getElementById('edit-email').value,
-        phoneNumber: document.getElementById('edit-phone').value
+        address: document.getElementById('edit-address').value,
+        dateOfBirth: document.getElementById('edit-date-of-birth').value || null
     };
     
     try {
@@ -157,10 +158,10 @@ async function handleNewContact(e) {
     const contactData = {
         fname: document.getElementById('new-fname').value,
         lname: document.getElementById('new-lname').value,
-        birthdate: document.getElementById('new-birthdate').value || null,
-        address: document.getElementById('new-address').value,
+        phoneNumber: document.getElementById('new-phone').value,
         email: document.getElementById('new-email').value,
-        phoneNumber: document.getElementById('new-phone').value
+        address: document.getElementById('new-address').value,
+        dateOfBirth: document.getElementById('new-date-of-birth').value || null
     };
     
     try {
@@ -227,7 +228,7 @@ function clearForms() {
 
     document.getElementById('show-fname').value = '';
     document.getElementById('show-lname').value = '';
-    document.getElementById('show-birthdate').value = '';
+    document.getElementById('show-date-of-birth').value = '';
     document.getElementById('show-address').value = '';
     document.getElementById('show-email').value = '';
     document.getElementById('show-phone').value = '';
@@ -236,7 +237,7 @@ function clearForms() {
     document.getElementById('edit-id').value = '';
     document.getElementById('edit-fname').value = '';
     document.getElementById('edit-lname').value = '';
-    document.getElementById('edit-birthdate').value = '';
+    document.getElementById('edit-date-of-birth').value = '';
     document.getElementById('edit-address').value = '';
     document.getElementById('edit-email').value = '';
     document.getElementById('edit-phone').value = '';
