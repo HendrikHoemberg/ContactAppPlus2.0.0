@@ -2,6 +2,7 @@ package repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,12 +25,12 @@ public class ContactRepository implements IContactRepository {
     private void createTables() {
         String sql = "CREATE TABLE IF NOT EXISTS contacts (\n" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "fname TEXT NOT NULL,\n" +
-                "lname TEXT NOT NULL,\n" +
-                "birthdate TEXT,\n" +
-                "address TEXT,\n" +
-                "email TEXT,\n" +
+                "first_name TEXT NOT NULL,\n" +
+                "last_name TEXT NOT NULL,\n" +
                 "phone_number TEXT\n" +
+                "email_address TEXT,\n" +
+                "address TEXT,\n" +
+                "date_of_birth TEXT,\n" +
                 ");";
 
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -49,7 +50,7 @@ public class ContactRepository implements IContactRepository {
                 ResultSet result = statement.executeQuery(sql)) {
             while (result.next()) {
                 contacts.add(new Contact(
-                        result.getLong("contact_id"),
+                        result.getLong("coid"),
                         result.getString("first_name"),
                         result.getString("last_name"),
                         result.getString("phone_number")));
@@ -92,7 +93,28 @@ public class ContactRepository implements IContactRepository {
 
     @Override
     public Contact addContact(Contact contact) {
-        String sql = "";
+        String sql = "INSERT INTO contacts (first_name, last_name, phone_number, email_address, birth_date, " +
+                "group_id, street, house_number, zip_code, city, state, country) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+                PreparedStatement stmt = conn.prepareStatement(sql);) {
+            stmt.setString(1, contact.getFirstName());
+            stmt.setString(2, contact.getLastName());
+            stmt.setString(3, contact.getPhoneNumber());
+            stmt.setString(4, contact.getEmail());
+            stmt.setDate(5, contact.getBirthdate()); // java.sql.Date
+            stmt.setInt(6, contact.getgroupId());
+            stmt.setString(7, contact.getstreet());
+            stmt.setString(8, contact.gethouseNumber());
+            stmt.setString(9, contact.getzipCode());
+            stmt.setString(10, contact.getcity());
+            stmt.setString(11, contact.getstate());
+            stmt.setString(12, contact.getcountry());
+
+            stmt.executeUpdate();
+        } catch (Exception exception) {
+
+        }
         // TO-DO
         throw new UnsupportedOperationException("Unimplemented method 'addContact'");
     }
