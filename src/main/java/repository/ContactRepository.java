@@ -86,7 +86,13 @@ public class ContactRepository implements IContactRepository {
     }
 
     public void deleteContact(Long id) {
-        String sql = "";
+        String sql = "DELETE FROM contacts WHERE id = " + id + ";";
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+                Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (Exception exception) {
+            // TODO: error handling
+        }
     }
 
     @Override
