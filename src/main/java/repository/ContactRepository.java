@@ -50,10 +50,13 @@ public class ContactRepository implements IContactRepository {
                 ResultSet result = statement.executeQuery(sql)) {
             while (result.next()) {
                 contacts.add(new Contact(
-                        result.getLong("coid"),
+                        result.getLong("id"),
                         result.getString("first_name"),
                         result.getString("last_name"),
-                        result.getString("phone_number")));
+                        result.getString("phone_number"),
+                        result.getString("email_address"),
+                        result.getString("address"),
+                        result.getString("date_of_birth")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
