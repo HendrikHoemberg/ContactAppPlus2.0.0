@@ -18,10 +18,12 @@ import contactApp.Contact;
 public class ContactRepository implements IContactRepository {
     private static final String CONNECTION_STRING = "jdbc:sqlite:contactsdb.sqlite";
 
+    // Constructor
     public ContactRepository() {
         createTables();
     }
 
+    // Create table for data structure
     private void createTables() {
         String sql = "CREATE TABLE IF NOT EXISTS contacts (\n" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -36,11 +38,12 @@ public class ContactRepository implements IContactRepository {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
                 Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
+    // Get all contacts from the database and return as an List of Contact objects
     @Override
     public List<Contact> getAllContacts() {
         String sql = "SELECT * FROM contacts";
@@ -58,12 +61,13 @@ public class ContactRepository implements IContactRepository {
                         result.getString("address"),
                         result.getString("date_of_birth")));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
         return contacts;
     }
 
+    // Search a contact in database by id and retrieve an object of Contact
     public Optional<Contact> getContactById(Long id) {
         String sql = "SELECT * FROM contacts WHERE id = " + id;
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
@@ -88,16 +92,18 @@ public class ContactRepository implements IContactRepository {
         }
     }
 
+    // Delete contact from database by given id
     public void deleteContact(Long id) {
         String sql = "DELETE FROM contacts WHERE id = " + id + ";";
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
                 Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (Exception exception) {
-            // TODO: error handling
+            exception.printStackTrace();
         }
     }
 
+    // Add a contact to the database
     @Override
     public Contact addContact(Contact contact) { // TODO: Needs to return the ID as well
         String sql = "INSERT INTO contacts (first_name, last_name, phone_number, email_address, address, date_of_birth)"
@@ -119,6 +125,7 @@ public class ContactRepository implements IContactRepository {
         return contact;
     }
 
+    // Update contact info data when a contacts details have been changed
     @Override
     public Contact updateContact(Contact contact) {
         String sql = "UPDATE contacts SET first_name = ?, last_name = ?, phone_number = ?, email_address = ?, address = ?, date_of_birth = ? WHERE id = ?";
