@@ -105,12 +105,14 @@ public class ContactRepository implements IContactRepository {
 
     // Add a contact to the database
     @Override
-    public Contact addContact(Contact contact) { // TODO: Needs to return the ID as well
+    public Contact addContact(Contact contact) {
         String sql = "INSERT INTO contacts (first_name, last_name, phone_number, email_address, address, date_of_birth)"
                 +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                " VALUES (?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-                PreparedStatement stmt = conn.prepareStatement(sql);) {
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             stmt.setString(1, contact.getFirstName());
             stmt.setString(2, contact.getLastName());
             stmt.setString(3, contact.getPhoneNumber());
@@ -118,10 +120,20 @@ public class ContactRepository implements IContactRepository {
             stmt.setString(5, contact.getAddress());
             stmt.setString(6, contact.getDateOfBirth());
 
-            stmt.executeUpdate();
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        long generatedId = generatedKeys.getInt(1);
+                        contact.setId(generatedId); // Du brauchst setId(int id) in deiner Contact-Klasse
+                    }
+                }
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+
         return contact;
     }
 
