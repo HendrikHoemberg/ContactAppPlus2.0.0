@@ -9,6 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Contact entity class.
+ */
 @Entity
 public class Contact {
 
@@ -31,9 +34,23 @@ public class Contact {
 	
 	private String dateOfBirth;
 
+	/**
+	 * Default constructor.
+	 */
 	public Contact() {
 	}
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param id 
+	 * @param firstName 
+	 * @param lastName 
+	 * @param phoneNumber 
+	 * @param email 
+	 * @param address
+	 * @param dateOfBirth 
+	 */
 	public Contact(Long id, @NotBlank(message = "First name is required") String firstName,
 			@NotBlank(message = "Last name is required") String lastName, String phoneNumber,
 			@Email(message = "Please provide a valid email address") String email, String address, String dateOfBirth) {
@@ -103,6 +120,13 @@ public class Contact {
 		this.dateOfBirth = dateOfBirth;
 	}
 
+	/**
+	 * Compares this contact with another object for equality.
+	 * Two contacts are considered equal if they have the same ID.
+	 *
+	 * @param o The object to compare with this contact
+	 * @return true if the objects are equal, false otherwise
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -113,11 +137,22 @@ public class Contact {
 		return Objects.equals(id, contact.id);
 	}
 
+	/**
+	 * Returns a hash code value for this contact based on its ID.
+	 *
+	 * @return A hash code value for this contact
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
 
+	/**
+	 * Returns a string representation of this contact.
+	 * The string includes all the contact's fields.
+	 *
+	 * @return A string representation of this contact
+	 */
 	@Override
 	public String toString() {
 		return "Contact{" +

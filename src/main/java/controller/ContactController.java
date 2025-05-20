@@ -17,22 +17,42 @@ import org.springframework.web.bind.annotation.RestController;
 import contactApp.Contact;
 import service.ContactService;
 
+/**
+ * REST controller for managing contacts.
+ * Provides endpoints for CRUD operations on contacts.
+ */
 @RestController
 @RequestMapping("/api/contacts")
 public class ContactController {
 
     private final ContactService contactService;
 
+    /**
+     * Constructor for ContactController.
+     * 
+     * @param contactService The service for contact operations, injected by Spring
+     */
     @Autowired
     public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
 
+    /**
+     * Retrieves all contacts from the database.
+     * 
+     * @return A list of all contacts
+     */
     @GetMapping
     public List<Contact> getAllContacts() {
         return contactService.getAllContacts();
     }
 
+    /**
+     * Retrieves a specific contact by its ID.
+     * 
+     * @param id The ID of the contact to retrieve
+     * @return ResponseEntity containing the contact if found, or a 404 Not Found response
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
         Optional<Contact> contact = contactService.getContactById(id);
@@ -40,11 +60,24 @@ public class ContactController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Creates a new contact.
+     * 
+     * @param contact The contact details to create
+     * @return The created contact with its generated ID
+     */
     @PostMapping
     public Contact createContact(@RequestBody Contact contact) {
         return contactService.addContact(contact);
     }
 
+    /**
+     * Updates an existing contact.
+     * 
+     * @param id             The ID of the contact to update
+     * @param contactDetails The new details for the contact
+     * @return ResponseEntity containing the updated contact if found, or a 404 Not Found response
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Contact> updateContact(@PathVariable Long id, @RequestBody Contact contactDetails) {
         Optional<Contact> optionalContact = contactService.getContactById(id);
@@ -64,6 +97,12 @@ public class ContactController {
         }
     }
 
+    /**
+     * Deletes a contact by its ID.
+     * 
+     * @param id The ID of the contact to delete
+     * @return ResponseEntity with no content if successful, or a 404 Not Found response
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id) {
         Optional<Contact> contact = contactService.getContactById(id);
