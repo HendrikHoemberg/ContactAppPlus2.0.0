@@ -1,1 +1,0 @@
-- addContact in ContactRepository needs to return the ID as well
